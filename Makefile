@@ -10,3 +10,7 @@ run: main
 clean:
 	rm ./main.o
 	rm ./main
+
+generate: generator.cpp
+	g++ generator.cpp -o generator
+	./generator

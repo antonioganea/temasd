@@ -196,7 +196,7 @@ int main (){
             fscanf(fin,"%d",V+i);
             //printf("%d ",V[i]);
         }
-        puts("");
+        //puts("");
 
         int * tempVector = new int[N];
 
@@ -208,9 +208,10 @@ int main (){
         qsort (stdSorted, N, sizeof(int), compare);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
         // printVector(stdSorted,N);
-        cout << "STD quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "STD quicksort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
+        if ( N <= 10000 )
         {
         memcpy(tempVector, V, N * sizeof(int));
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
@@ -222,7 +223,10 @@ int main (){
         } else {
             cout << "Failed! ";
         }
-        cout << "Bubble sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Bubble sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
+        }
+        else{
+            cout << "Input too big for bubblesort! ( > 10000 )" << endl;
         }
 
         {
@@ -234,7 +238,7 @@ int main (){
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
         }
-        cout << "Count sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Count sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
         {
@@ -246,7 +250,7 @@ int main (){
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
         }
-        cout << "Merge sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Merge sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
         {
@@ -258,7 +262,7 @@ int main (){
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
         }
-        cout << "Radix sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Radix sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
         {
@@ -270,7 +274,7 @@ int main (){
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
         }
-        cout << "Custom quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Custom quicksort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
         delete[] tempVector;
@@ -279,6 +283,8 @@ int main (){
 
         puts("");
     }
+    
+    fclose(fin);
 
     return 0;
 }
