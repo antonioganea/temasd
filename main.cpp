@@ -167,6 +167,18 @@ void quickSort(int * v, int left, int right){
         quickSort(v, i, right);
 }
 
+// Checks if two arrays contain the same data
+bool verify(int * v, int * sorted, int length)
+{
+    for ( int i = 0; i < length; i++ ){
+        if ( v[i] != sorted[i] ){
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int main (){
 
     int T;
@@ -178,21 +190,24 @@ int main (){
 
     for ( int testNo = 0; testNo < T; testNo++ ) {
         fscanf(fin,"%d%d",&N,&M);
+        printf("Running test : %d -- %d numbers, maximum = %d\n",testNo,N,M);
         int * V = new int[N];
         for ( int i = 0; i < N; i++ ){
             fscanf(fin,"%d",V+i);
-            printf("%d ",V[i]);
+            //printf("%d ",V[i]);
         }
         puts("");
 
         int * tempVector = new int[N];
 
+        int * stdSorted = new int[N];
+
         {
-        memcpy(tempVector, V, N * sizeof(int));
+        memcpy(stdSorted, V, N * sizeof(int));
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
-        qsort (tempVector, N, sizeof(int), compare);
+        qsort (stdSorted, N, sizeof(int), compare);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(stdSorted,N);
         cout << "STD quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
@@ -201,7 +216,12 @@ int main (){
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         bubblesort(tempVector,N);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
+        }
         cout << "Bubble sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
@@ -210,7 +230,10 @@ int main (){
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         countsort(tempVector,N,M);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        }
         cout << "Count sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
@@ -219,7 +242,10 @@ int main (){
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         mergesort(tempVector,0,N-1);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        }
         cout << "Merge sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
@@ -228,7 +254,10 @@ int main (){
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         radixsort(tempVector,N,M);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        }
         cout << "Radix sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
@@ -237,12 +266,18 @@ int main (){
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         quickSort (tempVector, 0, N-1);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
-        printVector(tempVector,N);
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        }
         cout << "Custom quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
         delete[] tempVector;
+        delete[] stdSorted;
         delete[] V;
+
+        puts("");
     }
 
     return 0;
