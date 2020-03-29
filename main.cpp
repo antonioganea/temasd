@@ -1,7 +1,12 @@
 #include <iostream>
 #include <cstdio>
 #include <chrono>
+#include <cstdlib>
 using namespace std;
+
+int compare (const void * a, const void * b){
+  return ( *(int*)a - *(int*)b );
+}
 
 void bubblesort(int * v, int length){
     bool unsorted = true;
@@ -153,6 +158,15 @@ int main (){
         puts("");
 
         int * tempVector = new int[N];
+
+        {
+        memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
+        qsort (tempVector, N, sizeof(int), compare);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
+        printVector(tempVector,N);
+        cout << "STD quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        }
 
         {
         memcpy(tempVector, V, N * sizeof(int));
