@@ -139,6 +139,34 @@ void printVector(int * v, int length){
     puts("");
 }
 
+void quickSort(int * v, int left, int right){
+    int i = left;
+    int j = right;
+    int pivot = v[(i + j) / 2];
+    int temp;
+
+    while (i <= j)
+    {
+        while (v[i] < pivot)
+            i++;
+        while (v[j] > pivot)
+            j--;
+        if (i <= j)
+        {
+            // swap v[i], v[j]
+            temp = v[i];
+            v[i] = v[j];
+            v[j] = temp;
+            i++;
+            j--;
+        }
+    }
+    if (j > left)
+        quickSort(v, left, j);
+    if (i < right)
+        quickSort(v, i, right);
+}
+
 int main (){
 
     int T;
@@ -202,6 +230,15 @@ int main (){
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
         printVector(tempVector,N);
         cout << "Radix sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        }
+
+        {
+        memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
+        quickSort (tempVector, 0, N-1);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
+        printVector(tempVector,N);
+        cout << "Custom quicksort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
         delete[] tempVector;
