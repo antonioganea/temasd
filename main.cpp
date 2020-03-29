@@ -37,7 +37,7 @@ void countsort(int * v, int length, int maxNo ){
 }
 
 
-void merge(int * v, int left, int mid, int right) 
+void merge(int * v, int left, int mid, int right)
 { 
     int i, j, k; 
     int n1 = mid - left + 1; 
@@ -97,6 +97,34 @@ void mergesort(int * v, int left, int right)
 } 
 
 
+  
+void radixSortCount(int * v, int n, int exp)
+{
+    int output[n];
+    int i;
+    int count[10] = {0};
+
+    for (i = 0; i < n; i++)
+        count[ ( v[i] / exp )%10 ]++;
+  
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+  
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[ ( v[i] / exp )%10 ] - 1] = v[i];
+        count[ ( v[i] / exp )%10 ]--;
+    }
+
+    memcpy( v, output, n * sizeof(int) );
+}
+
+void radixsort(int * v, int n, int max) 
+{
+    for (int exp = 1; max/exp > 0; exp *= 10)
+        radixSortCount(v, n, exp);
+}
+
 FILE * fin;
 
 void printVector(int * v, int length){
@@ -151,6 +179,15 @@ int main (){
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
         printVector(tempVector,N);
         cout << "Merge sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        }
+
+        {
+        memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
+        radixsort(tempVector,N,M);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
+        printVector(tempVector,N);
+        cout << "Radix sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
         }
 
         delete[] tempVector;
