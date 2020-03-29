@@ -3,9 +3,6 @@
 #include <chrono>
 using namespace std;
 
-int V[10000];
-int tempVector[10000];
-
 void bubblesort(int * v, int length){
     bool unsorted = true;
     while ( unsorted ){
@@ -41,12 +38,14 @@ int main (){
 
     for ( int testNo = 0; testNo < T; testNo++ ) {
         fscanf(fin,"%d%d",&N,&M);
+        int * V = new int[N];
         for ( int i = 0; i < N; i++ ){
             fscanf(fin,"%d",V+i);
             printf("%d ",V[i]);
         }
         puts("");
 
+        int * tempVector = new int[N];
         memcpy(tempVector, V, N * sizeof(int));
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         bubblesort(tempVector,N);
@@ -54,7 +53,8 @@ int main (){
         printVector(tempVector,N);
         cout << "Duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
 
-
+        delete[] tempVector;
+        delete[] V;
     }
 
     return 0;
