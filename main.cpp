@@ -3,6 +3,7 @@
 using namespace std;
 
 int V[10000];
+int tempVector[10000];
 
 void bubblesort(int * v, int length){
     bool unsorted = true;
@@ -44,8 +45,10 @@ int main (){
             printf("%d ",V[i]);
         }
         puts("");
-        bubblesort(V,N);
-        printVector(V,N);
+
+        memcpy(tempVector, V, N * sizeof(int));
+        bubblesort(tempVector,N);
+        printVector(tempVector,N);
 
 
     }
