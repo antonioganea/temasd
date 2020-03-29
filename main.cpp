@@ -8,12 +8,30 @@ void bubblesort(int * v, int length){
     while ( unsorted ){
         unsorted = false;
         for ( int i = 0; i < length-1; i++ ){
-            if ( v[i] < v[i+1] ){
+            if ( v[i] > v[i+1] ){
                 int temp = v[i];
                 v[i] = v[i+1];
                 v[i+1] = temp;
                 unsorted = true;
             }
+        }
+    }
+}
+
+void countsort(int * v, int length, int maxNo ){
+    int V[maxNo+1];
+    for ( int i = 0; i <= maxNo; i++ ){
+        V[i] = 0;
+    }
+    for ( int i = 0; i < length; i++ ){
+        V[v[i]]++;
+    }
+    int k = 0;
+    for ( int i = 0; i <= maxNo; i++ ){
+        while ( V[i] > 0 ){
+            v[k] = i;
+            k++;
+            V[i]--;
         }
     }
 }
@@ -46,12 +64,24 @@ int main (){
         puts("");
 
         int * tempVector = new int[N];
+
+        {
         memcpy(tempVector, V, N * sizeof(int));
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
         bubblesort(tempVector,N);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
         printVector(tempVector,N);
-        cout << "Duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        cout << "Bubble sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        }
+
+        {
+        memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
+        countsort(tempVector,N,M);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
+        printVector(tempVector,N);
+        cout << "Count sort - duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
+        }
 
         delete[] tempVector;
         delete[] V;
