@@ -42,69 +42,57 @@ void countsort(int * v, int length, int maxNo ){
 }
 
 
-void merge(int * v, int left, int mid, int right)
-{ 
-    int i, j, k; 
-    int n1 = mid - left + 1; 
-    int n2 =  right - mid; 
-  
-    int L[n1], R[n2]; 
-  
-    for (i = 0; i < n1; i++) 
-        L[i] = v[left + i]; 
-    for (j = 0; j < n2; j++) 
-        R[j] = v[mid + 1 + j]; 
-  
+void merge(int * v, int left, int mid, int right){
+    int i, j, k;
+    int n1 = mid - left + 1;
+    int n2 =  right - mid;
+
+    int L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = v[left + i];
+    for (j = 0; j < n2; j++)
+        R[j] = v[mid + 1 + j];
+
     i = 0;
     j = 0;
     k = left;
-    while (i < n1 && j < n2) 
-    { 
-        if (L[i] <= R[j]) 
-        { 
-            v[k] = L[i]; 
-            i++; 
-        } 
-        else
-        { 
-            v[k] = R[j]; 
-            j++; 
-        } 
-        k++; 
-    } 
+    while (i < n1 && j < n2){
+        if (L[i] <= R[j]){
+            v[k] = L[i];
+            i++;
+        } else {
+            v[k] = R[j];
+            j++;
+        }
+        k++;
+    }
 
-    while (i < n1) 
-    { 
-        v[k] = L[i]; 
-        i++; 
-        k++; 
-    } 
+    while (i < n1){
+        v[k] = L[i];
+        i++;
+        k++;
+    }
 
-    while (j < n2) 
-    { 
-        v[k] = R[j]; 
-        j++; 
-        k++; 
-    } 
+    while (j < n2){
+        v[k] = R[j];
+        j++;
+        k++;
+    }
 }
 
-void mergesort(int * v, int left, int right) 
-{ 
-    if (left < right) 
-    { 
-        int mid = (left+right)/2; 
+void mergesort(int * v, int left, int right){
+    if (left < right){
+        int mid = (left+right)/2;
 
-        mergesort(v, left, mid); 
-        mergesort(v, mid+1, right); 
+        mergesort(v, left, mid);
+        mergesort(v, mid+1, right);
+
+        merge(v, left, mid, right);
+    }
+}
   
-        merge(v, left, mid, right); 
-    } 
-} 
-
-
-  
-void radixSortCount(int * v, int n, int exp)
-{
+void radixSortCount(int * v, int n, int exp){
     int output[n];
     int i;
     int count[10] = {0};
@@ -115,8 +103,7 @@ void radixSortCount(int * v, int n, int exp)
     for (i = 1; i < 10; i++)
         count[i] += count[i - 1];
   
-    for (i = n - 1; i >= 0; i--)
-    {
+    for (i = n - 1; i >= 0; i--){
         output[count[ ( v[i] / exp )%10 ] - 1] = v[i];
         count[ ( v[i] / exp )%10 ]--;
     }
@@ -124,14 +111,12 @@ void radixSortCount(int * v, int n, int exp)
     memcpy( v, output, n * sizeof(int) );
 }
 
-void radixsort(int * v, int n, int max) 
-{
+void radixsort(int * v, int n, int max) {
     for (int exp = 1; max/exp > 0; exp *= 10)
         radixSortCount(v, n, exp);
 }
 
-void binradixSortCount(int * v, int n, int exp)
-{
+void binradixSortCount(int * v, int n, int exp){
     int output[n];
     int i;
     int count[2] = {0};
@@ -142,8 +127,7 @@ void binradixSortCount(int * v, int n, int exp)
     for (i = 1; i < 2; i++)
         count[i] += count[i - 1];
   
-    for (i = n - 1; i >= 0; i--)
-    {
+    for (i = n - 1; i >= 0; i--){
         output[count[ (v[i] & exp) !=  0 ] - 1] = v[i];
         count[ (v[i] & exp) !=  0 ]--;
     }
@@ -152,8 +136,7 @@ void binradixSortCount(int * v, int n, int exp)
 }
 
 // Binary Radix Sort version
-void binradixsort(int * v, int n, int max) 
-{
+void binradixsort(int * v, int n, int max){
     for (int exp = 1; max >= exp; exp = exp << 1)
         binradixSortCount(v, n, exp);
 }
@@ -173,14 +156,12 @@ void quickSort(int * v, int left, int right){
     int pivot = v[(i + j) / 2];
     int temp;
 
-    while (i <= j)
-    {
+    while (i <= j){
         while (v[i] < pivot)
             i++;
         while (v[j] > pivot)
             j--;
-        if (i <= j)
-        {
+        if (i <= j){
             // swap v[i], v[j]
             temp = v[i];
             v[i] = v[j];
@@ -196,8 +177,7 @@ void quickSort(int * v, int left, int right){
 }
 
 // Checks if two arrays contain the same data
-bool verify(int * v, int * sorted, int length)
-{
+bool verify(int * v, int * sorted, int length){
     for ( int i = 0; i < length; i++ ){
         if ( v[i] != sorted[i] ){
             return false;
