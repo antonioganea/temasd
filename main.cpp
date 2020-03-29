@@ -130,6 +130,34 @@ void radixsort(int * v, int n, int max)
         radixSortCount(v, n, exp);
 }
 
+void binradixSortCount(int * v, int n, int exp)
+{
+    int output[n];
+    int i;
+    int count[2] = {0};
+
+    for (i = 0; i < n; i++)
+        count[ (v[i] & exp) != 0 ]++;
+  
+    for (i = 1; i < 2; i++)
+        count[i] += count[i - 1];
+  
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[ (v[i] & exp) !=  0 ] - 1] = v[i];
+        count[ (v[i] & exp) !=  0 ]--;
+    }
+
+    memcpy( v, output, n * sizeof(int) );
+}
+
+// Binary Radix Sort version
+void binradixsort(int * v, int n, int max) 
+{
+    for (int exp = 1; max >= exp; exp = exp << 1)
+        binradixSortCount(v, n, exp);
+}
+
 FILE * fin;
 
 void printVector(int * v, int length){
@@ -237,6 +265,8 @@ int main (){
         // printVector(tempVector,N);
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
         }
         cout << "Count sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
@@ -249,6 +279,8 @@ int main (){
         // printVector(tempVector,N);
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
         }
         cout << "Merge sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
@@ -261,8 +293,24 @@ int main (){
         // printVector(tempVector,N);
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
         }
         cout << "Radix sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
+        }
+
+        {
+        memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
+        binradixsort(tempVector,N,M);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
+        // printVector(tempVector,N);
+        if ( verify(tempVector, stdSorted, N) ){
+            cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
+        }
+        cout << "Binary Radix sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
 
         {
@@ -273,6 +321,8 @@ int main (){
         // printVector(tempVector,N);
         if ( verify(tempVector, stdSorted, N) ){
             cout << "Passed! ";
+        } else {
+            cout << "Failed! ";
         }
         cout << "Custom quicksort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
