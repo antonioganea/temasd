@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdio>
+#include <chrono>
 using namespace std;
 
 int V[10000];
@@ -47,8 +48,11 @@ int main (){
         puts("");
 
         memcpy(tempVector, V, N * sizeof(int));
+        chrono::steady_clock::time_point start = chrono::steady_clock::now();
         bubblesort(tempVector,N);
+        chrono::steady_clock::time_point end = chrono::steady_clock::now();
         printVector(tempVector,N);
+        cout << "Duration " << chrono::duration_cast<chrono::nanoseconds>(end-start).count() << " nanoseconds" << endl;
 
 
     }
