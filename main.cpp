@@ -23,8 +23,9 @@ void bubblesort(int * v, int length){
     }
 }
 
-void countsort(int * v, int length, int maxNo ){
-    int V[maxNo+1];
+void countsort(int * v, int length, int maxNo, int * V ){
+    // int V[maxNo+1]; // used to cause stack overflows
+
     for ( int i = 0; i <= maxNo; i++ ){
         V[i] = 0;
     }
@@ -91,7 +92,7 @@ void mergesort(int * v, int left, int right){
         merge(v, left, mid, right);
     }
 }
-  
+
 void radixSortCount(int * v, int n, int exp){
     int output[n];
     int i;
@@ -99,10 +100,10 @@ void radixSortCount(int * v, int n, int exp){
 
     for (i = 0; i < n; i++)
         count[ ( v[i] / exp )%10 ]++;
-  
+
     for (i = 1; i < 10; i++)
         count[i] += count[i - 1];
-  
+
     for (i = n - 1; i >= 0; i--){
         output[count[ ( v[i] / exp )%10 ] - 1] = v[i];
         count[ ( v[i] / exp )%10 ]--;
@@ -123,10 +124,10 @@ void binradixSortCount(int * v, int n, int exp){
 
     for (i = 0; i < n; i++)
         count[ (v[i] & exp) != 0 ]++;
-  
+
     for (i = 1; i < 2; i++)
         count[i] += count[i - 1];
-  
+
     for (i = n - 1; i >= 0; i--){
         output[count[ (v[i] & exp) !=  0 ] - 1] = v[i];
         count[ (v[i] & exp) !=  0 ]--;
@@ -237,10 +238,11 @@ int main (){
             cout << "Input too big for bubblesort! ( > 10000 )" << endl;
         }
 
+        int * allocatedV = new int[M+1];
         {
         memcpy(tempVector, V, N * sizeof(int));
         chrono::steady_clock::time_point start = chrono::steady_clock::now();
-        countsort(tempVector,N,M);
+        countsort(tempVector,N,M,allocatedV);
         chrono::steady_clock::time_point end = chrono::steady_clock::now();
         // printVector(tempVector,N);
         if ( verify(tempVector, stdSorted, N) ){
@@ -250,6 +252,7 @@ int main (){
         }
         cout << "Count sort - duration " << chrono::duration_cast<chrono::microseconds>(end-start).count() << " microseconds" << endl;
         }
+        delete[] allocatedV;
 
         {
         memcpy(tempVector, V, N * sizeof(int));
@@ -313,7 +316,7 @@ int main (){
 
         puts("");
     }
-    
+
     fclose(fin);
 
     return 0;
